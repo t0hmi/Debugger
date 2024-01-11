@@ -32,10 +32,10 @@ export class LRP {
 
     const services = createSchedulerServices(NodeFileSystem).Scheduler;
     const tasks = await extractAstNode<Tasks>(args.sourceFile, services);
-    
+
     LRP.tasks.set(args.sourceFile, tasks);
     const builder = new ModelElementBuilder(registry);
-    
+
     return {
       astRoot: builder.fromTasksModel(tasks),
     };
@@ -48,7 +48,7 @@ export class LRP {
     const schedulerState = new SchedulerState(tasks);
     LRP.schedulerState.set(args.sourceFile, schedulerState);
     console.log("is finished", schedulerState.isFinished());
-    
+
     return {
       isExecutionDone: schedulerState.isFinished(),
     };
@@ -65,8 +65,7 @@ export class LRP {
     if (!registry) throw new Error("The registry is undefined.");
 
     const builder = new ModelElementBuilder(registry);
-    console.log("builder sch", builder.fromSchedulerState(schedulerState));
-    
+
     return {
       runtimeStateRoot: builder.fromSchedulerState(schedulerState),
     };

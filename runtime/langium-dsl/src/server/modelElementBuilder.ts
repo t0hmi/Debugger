@@ -38,12 +38,9 @@ export class ModelElementBuilder {
       id: this.registry.getOrCreateASTId(tasksModel),
       type: tasksModel.$type,
       attributes: {
-        name: "test",
+        name: "scheduler",
       },
-      children: {
-        tasks: tasks,
-        precedences: precedences,
-      },
+      children: {},
       refs: {},
     } as ModelElement;
   }
