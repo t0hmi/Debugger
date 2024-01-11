@@ -1,0 +1,12 @@
+{
+    "scopeName": "source.schedule",
+    "fileTypes": [
+        "schedule"
+    ],
+    "patterns": [
+        {
+            "name": "keyword.control.schedule",
+            "match": "\\b(task|precedence)\\b"
+        }
+    ]
+}

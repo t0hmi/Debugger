@@ -1,0 +1,326 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "Arguments": {
+            "properties": {
+                "sourceFile": {
+                    "description": "Source file targeted by the service call.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "sourceFile"
+            ],
+            "type": "object"
+        },
+        "BreakpointParameter": {
+            "description": "Parameter required by a breakpoint type.",
+            "properties": {
+                "isMultivalued": {
+                    "description": "True is the parameter is a collection, false otherwise.",
+                    "type": "boolean"
+                },
+                "name": {
+                    "description": "Name of the parameter.",
+                    "type": "string"
+                },
+                "objectType": {
+                    "description": "Object type of the parameter, as defined in {@link ModelElement.type}.\nExactly one of `primitiveType` and `objectType` must be set.",
+                    "type": "string"
+                },
+                "primitiveType": {
+                    "$ref": "#/definitions/PrimitiveType",
+                    "description": "Primitive type of the parameter.\nExactly one of `primitiveType` and `objectType` must be set."
+                }
+            },
+            "required": [
+                "isMultivalued",
+                "name"
+            ],
+            "type": "object"
+        },
+        "BreakpointType": {
+            "description": "Breakpoint type defined by the language runtime.",
+            "properties": {
+                "description": {
+                    "description": "Human-readable description of the breakpoint type.",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Unique identifier of the breakpoint type.",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Human-readable name of the breakpoint type.",
+                    "type": "string"
+                },
+                "parameters": {
+                    "description": "Parameters needed to evaluate a breakpoint of this type.",
+                    "items": {
+                        "$ref": "#/definitions/BreakpointParameter"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "description",
+                "id",
+                "name",
+                "parameters"
+            ],
+            "type": "object"
+        },
+        "CheckBreakpointArguments": {
+            "properties": {
+                "elementId": {
+                    "description": "Identifier of the model element.",
+                    "type": "string"
+                },
+                "sourceFile": {
+                    "description": "Source file targeted by the service call.",
+                    "type": "string"
+                },
+                "typeId": {
+                    "description": "Identifier of the breakpoint type.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "elementId",
+                "sourceFile",
+                "typeId"
+            ],
+            "type": "object"
+        },
+        "CheckBreakpointResponse": {
+            "properties": {
+                "isActivated": {
+                    "description": "True if the breakpoint is activated, false otherwise.",
+                    "type": "boolean"
+                },
+                "message": {
+                    "description": "Human-readable message to describe the cause of activation.\nShould only be set if `isActivated` is true.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "isActivated"
+            ],
+            "type": "object"
+        },
+        "GetBreakpointTypesResponse": {
+            "properties": {
+                "breakpointTypes": {
+                    "description": "Breakpoint types defined by the language runtime.",
+                    "items": {
+                        "$ref": "#/definitions/BreakpointType"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "breakpointTypes"
+            ],
+            "type": "object"
+        },
+        "GetRuntimeStateArguments": {
+            "properties": {
+                "sourceFile": {
+                    "description": "Source file targeted by the service call.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "sourceFile"
+            ],
+            "type": "object"
+        },
+        "GetRuntimeStateResponse": {
+            "properties": {
+                "runtimeStateRoot": {
+                    "$ref": "#/definitions/ModelElement",
+                    "description": "Root of the runtime state."
+                }
+            },
+            "required": [
+                "runtimeStateRoot"
+            ],
+            "type": "object"
+        },
+        "InitArguments": {
+            "additionalProperties": {},
+            "properties": {
+                "sourceFile": {
+                    "description": "Source file targeted by the service call.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "sourceFile"
+            ],
+            "type": "object"
+        },
+        "InitResponse": {
+            "properties": {
+                "isExecutionDone": {
+                    "description": "True if the execution is done, false otherwise.",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "isExecutionDone"
+            ],
+            "type": "object"
+        },
+        "Location": {
+            "description": "Location in a textual source file.",
+            "properties": {
+                "column": {
+                    "description": "Starting column.",
+                    "type": "number"
+                },
+                "endColumn": {
+                    "description": "End column.",
+                    "type": "number"
+                },
+                "endLine": {
+                    "description": "End line.",
+                    "type": "number"
+                },
+                "line": {
+                    "description": "Starting line.",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "column",
+                "endColumn",
+                "endLine",
+                "line"
+            ],
+            "type": "object"
+        },
+        "ModelElement": {
+            "description": "Element of the AST or runtime state.",
+            "properties": {
+                "attributes": {
+                    "additionalProperties": {},
+                    "description": "Attributes with primitive values.",
+                    "type": "object"
+                },
+                "children": {
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/ModelElement"
+                            },
+                            {
+                                "items": {
+                                    "$ref": "#/definitions/ModelElement"
+                                },
+                                "type": "array"
+                            }
+                        ]
+                    },
+                    "description": "Containment relations with other elements.",
+                    "type": "object"
+                },
+                "id": {
+                    "description": "Unique identifier of the element.",
+                    "type": "string"
+                },
+                "location": {
+                    "$ref": "#/definitions/Location",
+                    "description": "Location of the element in its original source file."
+                },
+                "refs": {
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "description": "References to other elements.",
+                    "type": "object"
+                },
+                "type": {
+                    "description": "Type of the element.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "attributes",
+                "children",
+                "id",
+                "refs",
+                "type"
+            ],
+            "type": "object"
+        },
+        "ParseArguments": {
+            "properties": {
+                "sourceFile": {
+                    "description": "Source file targeted by the service call.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "sourceFile"
+            ],
+            "type": "object"
+        },
+        "ParseResponse": {
+            "properties": {
+                "astRoot": {
+                    "$ref": "#/definitions/ModelElement",
+                    "description": "Root of the AST."
+                }
+            },
+            "required": [
+                "astRoot"
+            ],
+            "type": "object"
+        },
+        "PrimitiveType": {
+            "description": "Primitive type of a value.",
+            "enum": [
+                "boolean",
+                "number",
+                "string"
+            ],
+            "type": "string"
+        },
+        "StepArguments": {
+            "properties": {
+                "sourceFile": {
+                    "description": "Source file targeted by the service call.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "sourceFile"
+            ],
+            "type": "object"
+        },
+        "StepResponse": {
+            "properties": {
+                "isExecutionDone": {
+                    "description": "True if the execution is done, false otherwise.",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "isExecutionDone"
+            ],
+            "type": "object"
+        }
+    }
+}
+

@@ -1,0 +1,40 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+        "__restart": {
+            "description": "Arbitrary data from the previous, restarted session.\nThe data is sent as the `restart` attribute of the `terminated` event.\nThe client should leave the data intact."
+        },
+        "additionalArgs": {
+            "description": "Additional arguments that may be required for specific languages."
+        },
+        "enabledBreakpointTypeIds": {
+            "description": "Enabled breakpoint types at the start of execution.",
+            "items": {
+                "type": "string"
+            },
+            "type": "array"
+        },
+        "languageRuntimePort": {
+            "description": "Port on which the language runtime associated to the source file is listening.",
+            "type": "number"
+        },
+        "noDebug": {
+            "description": "If noDebug is true, the launch request should launch the program without enabling debugging.",
+            "type": "boolean"
+        },
+        "pauseOnStart": {
+            "description": "True if the program should stop before executing the first step.",
+            "type": "boolean"
+        },
+        "sourceFile": {
+            "description": "Source file for which to launch execution.",
+            "type": "string"
+        }
+    },
+    "required": [
+        "languageRuntimePort",
+        "sourceFile"
+    ],
+    "type": "object"
+}
+

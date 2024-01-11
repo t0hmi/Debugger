@@ -1,0 +1,195 @@
+{
+  "name": "configurable-debugger-vscode-extension",
+  "version": "1.0.0",
+  "description": "",
+  "publisher": "naomod",
+  "engines": {
+    "vscode": "^1.63.0"
+  },
+  "main": "./out/extension.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "categories": [
+    "Debuggers"
+  ],
+  "activationEvents": [
+    "onDebugResolve:configurable",
+    "onDebugDynamicConfigurations:configurable"
+  ],
+  "contributes": {
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "extension.configurable-debug.enableBreakpointType",
+          "when": "view == domainSpecificBreakpoints && viewItem == disabledBreakpointType",
+          "group": "inline"
+        },
+        {
+          "command": "extension.configurable-debug.disableBreakpointType",
+          "when": "view == domainSpecificBreakpoints && viewItem == enabledBreakpointType",
+          "group": "inline"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "extension.configurable-debug.enableBreakpointType",
+        "title": "Enable Breakpoint Type",
+        "category": "Configurable Debug",
+        "icon": {
+          "dark": "icons/add-dark.svg",
+          "light": "icons/add-light.svg"
+        }
+      },
+      {
+        "command": "extension.configurable-debug.disableBreakpointType",
+        "title": "Disable Breakpoint Type",
+        "category": "Configurable Debug",
+        "icon": {
+          "dark": "icons/remove-dark.svg",
+          "light": "icons/remove-light.svg"
+        }
+      }
+    ],
+    "views": {
+      "debug": [
+        {
+          "id": "domainSpecificBreakpoints",
+          "name": "Domain-Specific Breakpoints",
+          "icon": "icons/breakpoints-activate-light.svg",
+          "contextualTitle": "Debug",
+          "type": "tree",
+          "visibility": "collapsed",
+          "when": "inDebugMode"
+        }
+      ]
+    },
+    "debuggers": [
+      {
+        "type": "configurable",
+        "label": "Configurable Debug",
+        "program": "../debugger/out/main.js",
+        "runtime": "node",
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "sourceFile",
+              "languageRuntimePort"
+            ],
+            "properties": {
+              "sourceFile": {
+                "type": "string",
+                "description": "Absolute path to a text file.",
+                "default": "${workspaceFolder}/"
+              },
+              "configurableDebuggerPort": {
+                "type": "number",
+                "description": "Port on which the configurable debugger is listening.",
+                "default": 49153
+              },
+              "languageRuntimePort": {
+                "type": "number",
+                "description": "Port on which the language runtime associated to the source file is listening.",
+                "default": 49152
+              },
+              "pauseOnStart": {
+                "type": "boolean",
+                "description": "True if the program should stop before executing the first step.",
+                "default": true
+              },
+              "enabledBreakpointTypeIds": {
+                "type": "array",
+                "description": "Enabled breakpoint types at the start of execution."
+              },
+              "additionalArgs": {
+                "type": "object",
+                "description": "Additional arguments that may be required for specific languages."
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "configurable",
+            "request": "launch",
+            "name": "Launch Program",
+            "sourceFile": "${workspaceFolder}/",
+            "configurableDebuggerPort": 49153,
+            "languageRuntimePort": 49152,
+            "pauseOnStart": true,
+            "additionalArgs": {}
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "Configurable Debug: Launch",
+            "description": "A new configuration for launching a configurable debug program",
+            "body": {
+              "type": "configurable",
+              "request": "launch",
+              "name": "${2:Launch Program}",
+              "sourceFile": "^\"\\${workspaceFolder}/\"",
+              "configurableDebuggerPort": 49153,
+              "languageRuntimePort": 49152,
+              "pauseOnStart": true,
+              "enabledBreakpointTypeIds": [],
+              "additionalArgs": {}
+            }
+          }
+        ]
+      }
+    ],
+    "languages": [
+      {
+        "id": "stateMachine",
+        "aliases": [
+          "State Machine"
+        ],
+        "extensions": [
+          ".stmch"
+        ]
+      },
+      {
+        "id": "minitl",
+        "aliases": [
+          "MiniTL"
+        ],
+        "extensions": [
+          ".minitl"
+        ]
+      }
+    ],
+    "breakpoints": [
+      {
+        "language": "stateMachine"
+      },
+      {
+        "language": "minitl"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "stateMachine",
+        "scopeName": "source.stateMachine",
+        "path": "./syntaxes/stateMachine.tmGrammar.json"
+      },
+      {
+        "language": "minitl",
+        "scopeName": "source.transformation",
+        "path": "./syntaxes/minitl.tmGrammar.json"
+      }
+    ]
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "14.x",
+    "@types/vscode": "^1.63.0",
+    "@vscode/test-electron": "^2.0.3",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "jayson": "^4.0.0"
+  }
+}

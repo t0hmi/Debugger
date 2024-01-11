@@ -1,0 +1,59 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Schedule Runtime",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/runtime/langium-dsl/bin/cli.js",
+            "console": "integratedTerminal",
+            "args": [
+                "run",
+                "49152"
+            ],
+            "justMyCode": true
+        },
+        {
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}/Configurable-Debugger-VSCode-Extension"
+            ],
+            "name": "Launch Configurable Debug Extension",
+            "outFiles": [
+                "${workspaceFolder}/Configurable-Debugger-VSCode-Extension/out/**/*.js"
+            ],
+            "request": "launch",
+            "type": "extensionHost"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Configurable Debugger",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/Configurable-Debugger/out/main.js",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
+            "console": "integratedTerminal",
+            "args": [
+                "--port=49153"
+            ]
+        },
+        {
+            "name": "Launch Schedule",
+            "type": "configurable",
+            "request": "launch",
+            "sourceFile": "${workspaceFolder}/test.schedule",
+            "configurableDebuggerPort": 49153,
+            "languageRuntimePort": 49152,
+            "pauseOnStart": true,
+            "enabledBreakpointTypeIds": [],
+            "additionalArgs": {
+            }
+        }
+    ]
+}
