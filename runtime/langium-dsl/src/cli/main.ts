@@ -65,8 +65,6 @@ export default function (): void {
     .action(async (port: number) => {
       const server = new LRPServer();
       server.start(port);
-
-      //wait for server to start
       await new Promise<void>((resolve) =>
         setTimeout(() => {
           resolve();

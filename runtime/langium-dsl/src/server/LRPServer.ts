@@ -30,32 +30,8 @@ export class LRPServer {
     });
   }
 
-  protected async parse(args: any[]): Promise<any> {
-    try {
-      const result = await LRP.parse(args[0]);
-      console.log(result);
-
-      return result;
-    } catch (error) {
-      console.error("Error during parse:", error);
-      throw new Error("Failed to parse.");
-    }
-  }
-
   public start(port?: number): void {
-    if (!port) this.server.tcp().listen(49152, "localhost");
-    this.server.tcp().listen(port, "localhost");
+    this.server.tcp().listen(port ?? 49152, "localhost");
     console.log("[Server] server is running on port " + port ?? 49152);
-  }
-
-  customAsyncFunction(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      // Perform some asynchronous operation here
-      setTimeout(() => {
-        // Simulating an asynchronous operation
-        const result = { astRoot: "Coubeh" };
-        resolve(result);
-      }, 1000);
-    });
   }
 }

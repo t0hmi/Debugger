@@ -47,7 +47,6 @@ export class LRP {
 
     const schedulerState = new SchedulerState(tasks);
     LRP.schedulerState.set(args.sourceFile, schedulerState);
-    console.log("is finished", schedulerState.isFinished());
 
     return {
       isExecutionDone: schedulerState.isFinished(),

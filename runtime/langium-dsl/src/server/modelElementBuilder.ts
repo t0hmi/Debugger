@@ -27,12 +27,8 @@ export class ModelElementBuilder {
 
   fromTasksModel(tasksModel: Tasks): ModelElement {
     const tasks: ModelElement[] = [];
-    const precedences: ModelElement[] = [];
 
     tasksModel.tasks.forEach((task) => tasks.push(this.createTaskModel(task)));
-    tasksModel.precedences.forEach((precedence) =>
-      precedences.push(this.createPrecedenceModel(precedence))
-    );
 
     return {
       id: this.registry.getOrCreateASTId(tasksModel),
@@ -40,7 +36,9 @@ export class ModelElementBuilder {
       attributes: {
         name: "scheduler",
       },
-      children: {},
+      children: {
+        allTasks: tasks,
+      },
       refs: {},
     } as ModelElement;
   }
