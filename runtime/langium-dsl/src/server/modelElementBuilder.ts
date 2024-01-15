@@ -1,4 +1,4 @@
-import { Precedence, Task, Tasks } from "../language/generated/ast.js";
+import { Task, Tasks } from "../language/generated/ast.js";
 import { ModelElement } from "./LRPService.js";
 import { IDRegistry } from "./idRegistry.js";
 import { SchedulerState } from "./scheduler-state.js";
@@ -50,18 +50,6 @@ export class ModelElementBuilder {
       attributes: {
         name: task.name,
         duration: task.duration,
-      },
-      children: {},
-      refs: {},
-    };
-  }
-  private createPrecedenceModel(precedence: Precedence): ModelElement {
-    return {
-      id: this.registry.getOrCreateASTId(precedence),
-      type: precedence.$type,
-      attributes: {
-        task: precedence.task,
-        require: precedence.require,
       },
       children: {},
       refs: {},
